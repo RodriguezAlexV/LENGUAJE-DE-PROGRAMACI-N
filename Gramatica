@@ -1,0 +1,25 @@
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
+
+
+string generateLanguage(int n) {
+    string language;
+    for (int i = 0; i < n; ++i) {
+        char digit = rand() % 2 + '0';
+        language += digit;
+    }
+    return language;
+}
+
+int main() {
+    srand(time(nullptr));
+
+    int length = 10;
+    string generatedLanguage = generateLanguage(length);
+
+    cout << "Lenguaje generado: " << generatedLanguage << endl;
+
+    return 0;
+}
