@@ -1,0 +1,58 @@
+import streamlit as st
+import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
+
+def resumir_datos(archivo):
+    texto = archivo.read().decode("utf-8")
+    num_caracteres = len(texto)
+    letras = [c for c in texto if c.isalpha()]
+    num_letras = len(letras)
+    num_letras_mayusculas = sum(1 for c in letras if c.isupper())
+    num_letras_minusculas = sum(1 for c in letras if c.islower())
+    porcentaje_mayusculas = (num_letras_mayusculas / num_letras) * 100
+    porcentaje_minusculas = (num_letras_minusculas / num_letras) * 100
+    letras = np.array([ord(c) for c in letras])
+    media_letras = np.mean(letras)
+    mediana_letras = np.median(letras)
+    varianza_letras = np.var(letras)
+    return texto, num_caracteres, porcentaje_mayusculas, porcentaje_minusculas, media_letras, mediana_letras, varianza_letras
+
+def mostrar_grafico(porcentajes):
+    labels = ['Mayúsculas', 'Minúsculas']
+    fig, ax = plt.subplots()
+    ax.bar(labels, porcentajes, color=['blue', 'green'])
+    ax.set_xlabel('TIPO DE LETRA')
+    ax.set_ylabel('Porcentaje (%)')
+    ax.set_title('% Mayúsculas/Minúsculas')
+    st.pyplot(fig)
+
+
+st.set_page_config(page_title="Análisis de Texto", layout="wide")
+
+
+imagen_fondo = Image.open("a1.jpg")
+st.image(imagen_fondo, use_column_width=True)
+
+
+container = st.container()
+
+
+with container:
+    st.title("Alicación con Streamlit, Alex Rodriguez Velasco (228700)")
+    st.write("Buen día, por favor cargue un archivo en formato TXT")
+
+    archivo = st.file_uploader("Sube un archivo de texto (.txt)", type="txt")
+
+    if archivo is not None:
+        st.write("Resumen de Datos:")
+        texto, num_caracteres, porcentaje_mayusculas, porcentaje_minusculas, media_letras, mediana_letras, varianza_letras = resumir_datos(archivo)
+        st.write(f"Número de caracteres: {num_caracteres}")
+        st.write(f"Porcentaje de letras mayúsculas: {porcentaje_mayusculas:.2f}%")
+        st.write(f"Porcentaje de letras minúsculas: {porcentaje_minusculas:.2f}%")
+        st.write(f"Media de los valores ASCII de las letras: {media_letras:.2f}")
+        st.write(f"Mediana de los valores ASCII de las letras: {mediana_letras:.2f}")
+        st.write(f"Varianza de los valores ASCII de las letras: {varianza_letras:.2f}")
+
+        st.write("Visualización de Datos (Gráficos):")
+        mostrar_grafico([porcentaje_mayusculas, porcentaje_minusculas])
