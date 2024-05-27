@@ -1,0 +1,69 @@
+import streamlit as st
+import os
+import base64
+
+def detect_language(file_contents):
+    if "print(" in file_contents or "def " in file_contents or "import " in file_contents:
+        return "Python"
+    elif "cout" in file_contents or "using namespace std;" in file_contents or "int main()" in file_contents:
+        return "C++"
+    else:
+        return "No se pudo detectar el lenguaje"
+
+def solve_python(code):
+    try:
+        import sys
+        from io import StringIO
+        old_stdout = sys.stdout
+        redirected_output = sys.stdout = StringIO()
+
+        exec(code)
+
+        sys.stdout = old_stdout
+        result = redirected_output.getvalue()
+
+        return True, result.strip()
+    except Exception as e:
+        return False, f"Error al resolver el código de Python: {str(e)}"
+
+def solve_cpp(code):
+    return False, "La resolución de C++ no está implementada en esta versión."
+
+def main():
+    st.title("LECTOR DE CÓDIGO (Python, C++) Alex")
+    uploaded_file = st.file_uploader("Sube tu archivo de código en formato txt", type="txt")
+
+    if uploaded_file is not None:
+        file_contents = uploaded_file.getvalue().decode("utf-8")
+        st.text("Contenido del archivo:")
+        st.code(file_contents)
+
+        language = detect_language(file_contents)
+        st.text(f"Lenguaje detectado: {language}")
+
+        if language == "Python":
+            success, result = solve_python(file_contents)
+        elif language == "C++":
+            success, result = solve_cpp(file_contents)
+        else:
+            success, result = False, "No se puede resolver código en este lenguaje."
+
+        if success:
+            st.success("Código de Python resuelto correctamente: {}".format(result))
+            output_filename = "output.txt"
+            with open(output_filename, "w") as output_file:
+                output_file.write(result)
+            st.markdown(get_binary_file_downloader_html(output_filename), unsafe_allow_html=True)
+            os.remove(output_filename)
+        else:
+            st.error(result)
+
+def get_binary_file_downloader_html(bin_file, button_text='Descargar Resultado'):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    bin_str = base64.b64encode(data).decode()
+    href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">{button_text}</a>'
+    return href
+
+if __name__ == "__main__":
+    main()
