@@ -1,0 +1,43 @@
+#include <iostream>
+#define variable int
+#define suma +
+#define resta -
+#define multiplicacion *
+#define division /
+#define Alex cout
+#define bucle while
+#define condicion if
+#define sino else
+#define linea endl
+#define devolver return
+using namespace std;
+
+int main() {
+    variable a = 10;
+    variable b = 5;
+    variable x = 10;
+    variable sum = a suma b;
+    variable res = a resta b;
+    variable multi = a multiplicacion b;
+    variable divi = a division b;
+
+    Alex << "Suma: " << sum << linea;
+    Alex << "Resta: " << res << linea;
+    Alex << "Multiplicacion: " << multi << linea;
+    Alex << "Division: " << divi << linea;
+    bucle (x < 20) {
+        condicion (x % 2 == 0) {
+            Alex << x << linea;
+        }
+        x++;
+    }
+
+    variable numero = 7;
+    condicion (numero % 2 == 0) {
+        Alex << "El numero " << numero << " es par." << linea;
+    } sino {
+        Alex << "El numero " << numero << " es impar." << linea;
+    }
+
+    devolver 0;
+}
