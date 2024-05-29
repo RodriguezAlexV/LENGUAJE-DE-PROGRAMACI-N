@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+string calcularPotenciaPalabra(const string& palabra, int potencia) {
+    string resultado = "";
+    for (int i = 0; i < potencia; ++i) {
+        resultado += palabra;
+    }
+    return resultado;
+}
+
+int main() {
+    int longitudAlfabeto;
+    cout << "Ingrese la longitud del alfabeto: ";
+    cin >> longitudAlfabeto;
+    
+    if (longitudAlfabeto <= 0) {
+        cout << "La longitud del alfabeto debe ser un entero positivo." << endl;
+        return 1;
+    }
+    
+    char alfabeto[longitudAlfabeto];
+    
+    cout << "Ingrese los elementos del alfabeto:" << endl;
+    for (int i = 0; i < longitudAlfabeto; ++i) {
+        cin >> alfabeto[i];
+    }
+    
+    int potencia;
+    cout << "Ingrese la potencia de lenguaje (n): ";
+    cin >> potencia;
+    
+    if (potencia < 0) {
+        cout << "La potencia de lenguaje debe ser un entero no negativo." << endl;
+        return 1;
+    }
+    
+    string palabra = "";
+    for (int i = 0; i < longitudAlfabeto; ++i) {
+        palabra += alfabeto[i];
+    }
+    
+    string resultado = calcularPotenciaPalabra(palabra, potencia);
+    
+    cout << "La palabra elevada a la potencia " << potencia << " es: " << resultado << endl;
+    
+    return 0;
+}
