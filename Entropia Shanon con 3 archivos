@@ -1,0 +1,41 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+
+double calcularEntropia(std::string nombreArchivo) {
+    std::ifstream archivo(nombreArchivo);
+    char caracter;
+    int frecuencia[256] = {0};
+    double entropia = 0;
+    
+    while (archivo.get(caracter)) {
+        frecuencia[caracter]++;
+    }
+    
+    archivo.close();
+    
+    for (int i = 0; i < 256; i++) {
+        if (frecuencia[i] > 0) {
+            double probabilidad = (double)frecuencia[i] / 256;
+            entropia += probabilidad * log2(probabilidad);
+        }
+    }
+    
+    return -entropia;
+}
+
+int main() {
+    std::string archivo1 = "contra1.txt";
+    std::string archivo2 = "contra2.txt";
+    std::string archivo3 = "contra3.txt";
+    
+    double entropia1 = calcularEntropia(archivo1);
+    double entropia2 = calcularEntropia(archivo2);
+    double entropia3 = calcularEntropia(archivo3);
+    
+    std::cout << "Entropia de la S. de seguridad 1: " << entropia1 << std::endl;
+    std::cout << "Entropia del S. de seguridad 2: " << entropia2 << std::endl;
+    std::cout << "Entropia del S. de seguridad 3: " << entropia3 << std::endl;
+    
+    return 0;
+}
