@@ -1,0 +1,30 @@
+#include <iostream>
+#include <fstream>
+#include <unordered_map>
+#include <cmath>
+
+int main() {
+    std::string filename = "parrafo alex.txt";
+    std::ifstream file(filename);
+
+    std::unordered_map<char, int> charCount;
+    int totalChars = 0;
+
+    char c;
+    while (file >> std::noskipws >> c) {
+        charCount[c]++;
+        totalChars++;
+    }
+
+    file.close();
+
+    double entropy = 0.0;
+    for (auto& it : charCount) {
+        double p = static_cast<double>(it.second) / totalChars;
+        entropy -= p * log2(p);
+    }
+
+    std::cout << "Entropia: " << entropy << std::endl;
+
+    return 0;
+}
