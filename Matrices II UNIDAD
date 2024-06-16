@@ -1,0 +1,63 @@
+import streamlit as st
+
+def main():
+    st.title('Calcular Métodos de una matriz 3 x 3, Alex Rodriguez')
+
+    uploaded_file = st.file_uploader("Selecciona un archivo de texto (.txt)", type="txt")
+    if uploaded_file is not None:
+        content = uploaded_file.read().decode("utf-8")
+
+        matriz = parse_text_to_matrix(content)
+        
+        if matriz is not None and len(matriz) == 3 and all(len(row) == 3 for row in matriz):
+            st.subheader("Matriz cargada desde el archivo:")
+            st.write(matriz)
+
+            st.subheader("Métodos de análisis de la matriz:")
+
+            if st.button("Diagonal Principal"):
+                diagonal_principal = obtener_diagonal_principal(matriz)
+                st.write(diagonal_principal)
+
+            if st.button("Diagonal Superior"):
+                diagonal_superior = obtener_diagonal_superior(matriz)
+                st.write(diagonal_superior)
+
+            if st.button("Diagonal Inferior"):
+                diagonal_inferior = obtener_diagonal_inferior(matriz)
+                st.write(diagonal_inferior)
+
+            if st.button("Sumatoria de la matriz"):
+                metodo_adicional = metodo_adicional_matriz(matriz)
+                st.write(metodo_adicional)
+        else:
+            st.warning("El archivo debe contener exactamente una matriz de 3x3. Verifica el formato del archivo.")
+
+def parse_text_to_matrix(content):
+    lines = content.splitlines()
+    matrix = []
+
+    for line in lines:
+        row = list(map(int, line.strip().split()))
+        matrix.append(row)
+
+    return matrix
+
+def obtener_diagonal_principal(matriz):
+    diagonal_principal = [matriz[i][i] for i in range(3)]
+    return diagonal_principal
+
+def obtener_diagonal_superior(matriz):
+    diagonal_superior = [matriz[0][1], matriz[0][2], matriz[1][2]]
+    return diagonal_superior
+
+def obtener_diagonal_inferior(matriz):
+    diagonal_inferior = [matriz[1][0], matriz[2][0], matriz[2][1]]
+    return diagonal_inferior
+
+def metodo_adicional_matriz(matriz):
+    suma_total = sum(sum(row) for row in matriz)
+    return suma_total
+
+if __name__ == "__main__":
+    main()
